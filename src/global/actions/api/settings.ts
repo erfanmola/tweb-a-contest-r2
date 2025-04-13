@@ -174,7 +174,11 @@ addActionHandler('loadWallpapers', async (global): Promise<void> => {
     ...global,
     settings: {
       ...global.settings,
-      loadedWallpapers: result.wallpapers,
+      loadedWallpapers: result.wallpapers.filter(
+        (item, key) => key === result.wallpapers.indexOf(
+          result.wallpapers.find((i) => i.slug === item.slug)!,
+        ),
+      ),
     },
   };
   setGlobal(global);
@@ -706,7 +710,7 @@ addActionHandler('updateGlobalPrivacySettings', async (global, actions, payload)
   const shouldHideReadMarks = payload.shouldHideReadMarks ?? Boolean(global.settings.byKey.shouldHideReadMarks);
   const shouldNewNonContactPeersRequirePremium = payload.shouldNewNonContactPeersRequirePremium
     ?? Boolean(global.settings.byKey.shouldNewNonContactPeersRequirePremium);
-    // eslint-disable-next-line no-null/no-null
+  // eslint-disable-next-line no-null/no-null
   const nonContactPeersPaidStars = payload.nonContactPeersPaidStars === null ? undefined
     : payload.nonContactPeersPaidStars || global.settings.byKey.nonContactPeersPaidStars;
 

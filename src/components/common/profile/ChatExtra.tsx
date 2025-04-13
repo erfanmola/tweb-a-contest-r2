@@ -251,6 +251,9 @@ const ChatExtra: FC<OwnProps & StateProps> = ({
   });
 
   const handleOpenApp = useLastCallback(() => {
+    if (!chat) {
+      return;
+    }
     const botId = user?.id;
     if (!botId) {
       return;
@@ -273,7 +276,7 @@ const ChatExtra: FC<OwnProps & StateProps> = ({
     ),
   }, { withNodes: true });
 
-  if (chat?.isRestricted || (isSelf && !isInSettings)) {
+  if (!chat || chat.isRestricted || (isSelf && !isInSettings)) {
     return undefined;
   }
 

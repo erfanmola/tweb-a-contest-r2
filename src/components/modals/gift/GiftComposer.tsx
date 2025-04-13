@@ -85,7 +85,7 @@ function GiftComposer({
   const [shouldPayForUpgrade, setShouldPayForUpgrade] = useState<boolean>(false);
   const [shouldPayByStars, setShouldPayByStars] = useState<boolean>(false);
 
-  const customBackgroundValue = useCustomBackground(theme, customBackground);
+  const customBackgroundValue = useCustomBackground(theme, customBackground).background;
 
   const isStarGift = 'id' in gift;
   const hasPremiumByStars = giftByStars && 'amount' in giftByStars;

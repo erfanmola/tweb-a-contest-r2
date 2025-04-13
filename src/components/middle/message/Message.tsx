@@ -116,6 +116,7 @@ import {
 import buildClassName from '../../../util/buildClassName';
 import { getMessageKey } from '../../../util/keys/messageKey';
 import stopEvent from '../../../util/stopEvent';
+import { tween } from '../../../util/tween';
 import { isElementInViewport } from '../../../util/visibility/isElementInViewport';
 import { IS_ANDROID, IS_ELECTRON, IS_TRANSLATION_SUPPORTED } from '../../../util/windowEnvironment';
 import { calculateDimensionsForMessageMedia, getStickerDimensions, REM } from '../../common/helpers/mediaDimensions';
@@ -160,6 +161,7 @@ import ReactionStaticEmoji from '../../common/reactions/ReactionStaticEmoji';
 import TopicChip from '../../common/TopicChip';
 import { animateSnap } from '../../main/visualEffects/SnapEffectContainer';
 import Button from '../../ui/Button';
+import { getWallpaperGradientRenderer } from '../ChatBackground';
 import Album from './Album';
 import AnimatedCustomEmoji from './AnimatedCustomEmoji';
 import AnimatedEmoji from './AnimatedEmoji';
@@ -849,6 +851,16 @@ const Message: FC<OwnProps & StateProps> = ({
     isQuote: Boolean(focusedQuote),
     scrollTargetPosition,
   });
+
+  useEffect(() => {
+    if (!isJustAdded) return;
+    const gradientRenderer = getWallpaperGradientRenderer();
+    if (!gradientRenderer) return;
+    const gradientTween = tween(0.625);
+    requestAnimationFrame(() => {
+      gradientRenderer.toNextPosition(gradientTween.progress);
+    });
+  }, [isJustAdded]);
 
   const viaBusinessBotTitle = viaBusinessBot ? getPeerFullTitle(lang, viaBusinessBot) : undefined;
 

@@ -4,6 +4,7 @@ import type {
 import type {
   GiftProfileFilterOptions,
 } from './types';
+import type { IconName } from './types/icons';
 
 export const APP_CODE_NAME = 'A';
 export const APP_NAME = process.env.APP_NAME || `Telegram Web ${APP_CODE_NAME}`;
@@ -57,6 +58,7 @@ export const MEDIA_PROGRESSIVE_CACHE_DISABLED = false;
 export const MEDIA_PROGRESSIVE_CACHE_NAME = 'tt-media-progressive';
 export const MEDIA_CACHE_MAX_BYTES = 512 * 1024; // 512 KB
 export const CUSTOM_BG_CACHE_NAME = 'tt-custom-bg';
+export const CUSTOM_WALLPAPER_CACHE_NAME = 'tt-custom-wallpaper';
 export const LANG_CACHE_NAME = 'tt-lang-packs-v49';
 export const ASSET_CACHE_NAME = 'tt-assets';
 export const AUTODOWNLOAD_FILESIZE_MB_LIMITS = [1, 5, 10, 50, 100, 500];
@@ -447,7 +449,7 @@ export const PREMIUM_LIMITS_ORDER: ApiLimitTypeForPromo[] = [
   'recommendedChannels',
 ];
 
-export const DEFAULT_GIFT_PROFILE_FILTER_OPTIONS : GiftProfileFilterOptions = {
+export const DEFAULT_GIFT_PROFILE_FILTER_OPTIONS: GiftProfileFilterOptions = {
   sortType: 'byDate',
   shouldIncludeUnlimited: true,
   shouldIncludeLimited: true,
@@ -455,3 +457,36 @@ export const DEFAULT_GIFT_PROFILE_FILTER_OPTIONS : GiftProfileFilterOptions = {
   shouldIncludeDisplayed: true,
   shouldIncludeHidden: true,
 } as const;
+
+export const FILTER_EMOTICON_ICONS: Record<string, IconName> = {
+  '💬': 'filter-chats',
+  '👤': 'filter-user',
+  '🤖': 'filter-bot',
+  '⭐': 'filter-star',
+  '👥': 'filter-group',
+  '📢': 'filter-channel',
+  '📁': 'filter-folder',
+  '✅': 'filter-chat',
+  // '🔔': 'Unmuted',
+  // '📋': 'Setup',
+  // '🐱': 'Cat',
+  // '👑': 'Crown',
+  // '🌹': 'Flower',
+  // '🎮': 'Game',
+  // '🏠': 'Home',
+  // '❤️': 'Love',
+  // '🎭': 'Mask',
+  // '🍸': 'Party',
+  // '⚽': 'Sport',
+  // '🎓': 'Study',
+  // '📈': 'Trade',
+  // '✈️': 'Travel',
+  // '💼': 'Work',
+  // '🚫': 'Airplane',
+  // '📕': 'Book',
+  // '💡': 'Light',
+  // '👍': 'Like',
+  // '💰': 'Money',
+  // '🎵': 'Note',
+  // '🎨': 'Palette',
+};
