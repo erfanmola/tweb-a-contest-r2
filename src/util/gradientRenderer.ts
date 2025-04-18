@@ -33,6 +33,8 @@ export function getHexColorFromTelegramColor(color: number) {
 }
 
 export default class ChatBackgroundGradientRenderer {
+  public readonly context = '2d';
+
   private readonly width = WIDTH;
 
   private readonly height = HEIGHT;
@@ -384,6 +386,7 @@ export default class ChatBackgroundGradientRenderer {
 
   public static create(colors?: string, canvas?: HTMLCanvasElement) {
     canvas = canvas ?? this.createCanvas(colors);
+    canvas.setAttribute('data-colors', colors ?? '');
     const gradientRenderer = new ChatBackgroundGradientRenderer();
     gradientRenderer.init(canvas);
 

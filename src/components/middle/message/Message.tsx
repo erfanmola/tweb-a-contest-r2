@@ -856,10 +856,14 @@ const Message: FC<OwnProps & StateProps> = ({
     if (!isJustAdded) return;
     const gradientRenderer = getWallpaperGradientRenderer();
     if (!gradientRenderer) return;
-    const gradientTween = tween(0.625);
-    requestAnimationFrame(() => {
-      gradientRenderer.toNextPosition(gradientTween.progress);
-    });
+    if (gradientRenderer.context === 'webgl') {
+      gradientRenderer.toNextPosition();
+    } else {
+      const gradientTween = tween(0.625);
+      requestAnimationFrame(() => {
+        gradientRenderer.toNextPosition(gradientTween.progress);
+      });
+    }
   }, [isJustAdded]);
 
   const viaBusinessBotTitle = viaBusinessBot ? getPeerFullTitle(lang, viaBusinessBot) : undefined;

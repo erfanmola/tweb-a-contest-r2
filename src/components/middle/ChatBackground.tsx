@@ -19,6 +19,7 @@ import ChatBackgroundGradientRenderer,
 {
   getColorsFromWallPaper, HEIGHT as gradientCanvasHeight, WIDTH as gradientCanvasWidth,
 } from '../../util/gradientRenderer';
+import { ChatBackgroundGradientRendererWebGL } from '../../util/gradientRendererWebGL';
 
 // import windowSize from '../../util/windowSize';
 // import useDebouncedCallback from '../../hooks/useDebouncedCallback';
@@ -36,7 +37,9 @@ type OwnProps = {
 
 type StateProps = {};
 
-let gradientRenderer: ReturnType<typeof ChatBackgroundGradientRenderer.create> | undefined;
+let gradientRenderer: ReturnType<typeof ChatBackgroundGradientRenderer.create>
+| ReturnType<typeof ChatBackgroundGradientRendererWebGL.create>
+| undefined;
 export const getWallpaperGradientRenderer = () => gradientRenderer?.gradientRenderer;
 
 const ChatBackground: FC<OwnProps & StateProps> = ({
@@ -180,8 +183,13 @@ const ChatBackground: FC<OwnProps & StateProps> = ({
         gradientCanvasRef.current?.setAttribute('data-colors', colors);
         gradientCanvasRef.current!.width = gradientCanvasWidth;
         gradientCanvasRef.current!.height = gradientCanvasHeight;
-        const renderer = ChatBackgroundGradientRenderer.create(colors, gradientCanvasRef.current!);
-        gradientRenderer = renderer;
+        try {
+          const renderer = ChatBackgroundGradientRendererWebGL.create(colors, gradientCanvasRef.current!);
+          gradientRenderer = renderer;
+        } catch (e) {
+          const renderer = ChatBackgroundGradientRenderer.create(colors, gradientCanvasRef.current!);
+          gradientRenderer = renderer;
+        }
       });
     }
 

@@ -13,7 +13,7 @@ import buildClassName from '../../../util/buildClassName';
 import buildStyle from '../../../util/buildStyle';
 import * as cacheApi from '../../../util/cacheApi';
 import { fetchBlob } from '../../../util/files';
-import ChatBackgroundGradientRenderer, { getColorsFromWallPaper } from '../../../util/gradientRenderer';
+import ChatBackgroundGradientRenderer, { getColorsFromWallPaper, HEIGHT, WIDTH } from '../../../util/gradientRenderer';
 
 import useCanvasBlur from '../../../hooks/useCanvasBlur';
 import useMedia from '../../../hooks/useMedia';
@@ -101,10 +101,14 @@ const WallpaperTile: FC<OwnProps> = ({
   useEffect(() => {
     if (!wallpaper.pattern || !wallpaper.settings) return;
     const colors = getColorsFromWallPaper(wallpaper);
-    const gradientRenderer = ChatBackgroundGradientRenderer.create(colors);
-    if (gradientRenderer.canvas) {
-      gradientRef.current = gradientRenderer.canvas;
-    }
+    gradientRef.current = window.document.createElement('canvas');
+    gradientRef.current.width = WIDTH;
+    gradientRef.current.height = HEIGHT;
+    // try {
+    //   ChatBackgroundGradientRendererWebGL.create(colors, gradientRef.current);
+    // } catch (e) {
+    ChatBackgroundGradientRenderer.create(colors, gradientRef.current);
+    // }
   }, [wallpaper]);
 
   const intensity = useMemo(() => {
