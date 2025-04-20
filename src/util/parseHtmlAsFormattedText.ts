@@ -2,6 +2,7 @@ import type { ApiFormattedText, ApiMessageEntity } from '../api/types';
 import { ApiMessageEntityTypes } from '../api/types';
 
 import { RE_LINK_TEMPLATE } from '../config';
+import { formatMarkdownTable, parseMarkdownTable } from './markdown';
 import { IS_EMOJI_SUPPORTED } from './windowEnvironment';
 
 export const ENTITY_CLASS_BY_NODE_NAME: Record<string, ApiMessageEntityTypes> = {
@@ -131,6 +132,29 @@ function parseMarkdown(html: string) {
     `<span data-entity-type="${ApiMessageEntityTypes.Spoiler}">$2</span>`,
   );
 
+  // Expandable Blockquote
+  parsedHtml = parsedHtml.replace(
+    /(?!<(code|pre)[^<]*|<\/)(^|\n)\*\*&gt;[^\n]*(?:\n&gt;[^\n]*)*\|{2}(?![^<]*<\/(code|pre)>)/gm,
+    (match) => {
+      const content = match.replace(/^\**&gt;\s?/gm, '').replace(/\|{2}/, '').trim();
+      return `\n<blockquote class="blockquote expandable" dir="auto">${content}</blockquote>\n`;
+    },
+  );
+
+  // Blockquote
+  parsedHtml = parsedHtml.replace(
+    /(?!<(code|pre)[^<]*|<\/)(^|\n)(?:&gt;\s*(.+?)(?:\n|$))+(?![^<]*<\/(code|pre)>)/gm,
+    (match) => {
+      const content = match.replace(/^&gt;\s?/gm, '').trim();
+      return `\n<blockquote class="blockquote" dir="auto">${content}</blockquote>\n`;
+    },
+  );
+
+  parsedHtml = parsedHtml.replace(
+    /((\r?\n){2}|^)([^\r\n]*\|[^\r\n]*(\r?\n)?)+(?=(\r?\n){2}|$)/,
+    (match) => `<pre>${formatMarkdownTable(parseMarkdownTable(match))}</pre>`,
+  );
+
   return parsedHtml;
 }
 
@@ -225,6 +249,21 @@ function getEntityDataFromNode(
         offset,
         length,
         timestamp,
+      },
+    };
+  }
+
+  if (type === ApiMessageEntityTypes.Blockquote) {
+    const canCollapse = (node as HTMLElement).classList.contains('expandable')
+      || (node as HTMLImageElement).dataset.canCollapse?.toString() === 'true';
+
+    return {
+      index,
+      entity: {
+        type,
+        offset,
+        length,
+        canCollapse,
       },
     };
   }

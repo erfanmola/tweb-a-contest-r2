@@ -31,5 +31,7 @@ export default function deleteLastCharacterOutsideSelection(html: string) {
   const result = tempInput.innerHTML;
   document.body.removeChild(tempInput);
 
+  if (!tempInput.textContent?.trim()) return '';
+
   return result;
 }

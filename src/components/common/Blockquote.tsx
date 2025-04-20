@@ -41,7 +41,7 @@ const Blockquote = ({ canBeCollapsible, isToggleDisabled, children }: OwnProps) 
 
   return (
     <span
-      className={buildClassName(styles.root, isCollapsed && styles.collapsed)}
+      className={buildClassName(styles.root, isCollapsed && styles.collapsed, canBeCollapsible && 'expandable')}
       onClick={canExpand ? handleExpand : undefined}
     >
       <blockquote

@@ -1459,17 +1459,21 @@ const Composer: FC<OwnProps & StateProps> = ({
   });
 
   const removeSymbol = useLastCallback((inInputId = editableInputId) => {
-    const selection = window.getSelection()!;
+    try {
+      const selection = window.getSelection()!;
 
-    if (selection.rangeCount) {
-      const selectionRange = selection.getRangeAt(0);
-      if (isSelectionInsideInput(selectionRange, inInputId)) {
-        document.execCommand('delete', false);
-        return;
+      if (selection.rangeCount) {
+        const selectionRange = selection.getRangeAt(0);
+        if (isSelectionInsideInput(selectionRange, inInputId)) {
+          document.execCommand('delete', false);
+          return;
+        }
       }
-    }
 
-    setHtml(deleteLastCharacterOutsideSelection(getHtml()));
+      setHtml(deleteLastCharacterOutsideSelection(getHtml()));
+    } catch (e) {
+      // Ignore error
+    }
   });
 
   const removeSymbolAttachmentModal = useLastCallback(() => {
