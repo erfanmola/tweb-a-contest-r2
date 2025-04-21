@@ -171,7 +171,8 @@ const SymbolMenuButton: FC<OwnProps> = ({
       <SymbolMenu
         chatId={chatId}
         threadId={threadId}
-        isOpen={isSymbolMenuOpen || Boolean(isSymbolMenuForced)}
+        // TODO: Erfan Remove This
+        isOpen={true || isSymbolMenuOpen || Boolean(isSymbolMenuForced)}
         canSendGifs={canSendGifs}
         canSendStickers={canSendStickers}
         isMessageComposer={isMessageComposer}

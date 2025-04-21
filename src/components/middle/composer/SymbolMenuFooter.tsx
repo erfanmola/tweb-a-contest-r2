@@ -20,6 +20,7 @@ type OwnProps = {
 };
 
 export enum SymbolMenuTabs {
+  'AllEmoji',
   'Emoji',
   'CustomEmoji',
   'Stickers',
@@ -27,6 +28,7 @@ export enum SymbolMenuTabs {
 }
 
 export const SYMBOL_MENU_TAB_TITLES: Record<SymbolMenuTabs, string> = {
+  [SymbolMenuTabs.AllEmoji]: 'Emoji',
   [SymbolMenuTabs.Emoji]: 'Emoji',
   [SymbolMenuTabs.CustomEmoji]: 'StickersList.EmojiItem',
   [SymbolMenuTabs.Stickers]: 'AccDescrStickers',
@@ -34,6 +36,7 @@ export const SYMBOL_MENU_TAB_TITLES: Record<SymbolMenuTabs, string> = {
 };
 
 const SYMBOL_MENU_TAB_ICONS = {
+  [SymbolMenuTabs.AllEmoji]: 'icon-smile',
   [SymbolMenuTabs.Emoji]: 'icon-smile',
   [SymbolMenuTabs.CustomEmoji]: 'icon-favorite',
   [SymbolMenuTabs.Stickers]: 'icon-stickers',
@@ -85,12 +88,15 @@ const SymbolMenuFooter: FC<OwnProps> = ({
         </Button>
       )}
 
+      {canSendPlainText && renderTabButton(SymbolMenuTabs.AllEmoji)}
       {canSendPlainText && renderTabButton(SymbolMenuTabs.Emoji)}
       {canSendPlainText && renderTabButton(SymbolMenuTabs.CustomEmoji)}
       {!isAttachmentModal && renderTabButton(SymbolMenuTabs.Stickers)}
       {!isAttachmentModal && renderTabButton(SymbolMenuTabs.GIFs)}
 
-      {(activeTab === SymbolMenuTabs.Emoji || activeTab === SymbolMenuTabs.CustomEmoji) && (
+      {(activeTab === SymbolMenuTabs.Emoji
+      || activeTab === SymbolMenuTabs.CustomEmoji
+      || activeTab === SymbolMenuTabs.AllEmoji) && (
         <Button
           className="symbol-delete-button"
           onClick={onRemoveSymbol}

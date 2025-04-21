@@ -20,6 +20,7 @@ import useMouseInside from '../../../hooks/useMouseInside';
 import useOldLang from '../../../hooks/useOldLang';
 import useShowTransitionDeprecated from '../../../hooks/useShowTransitionDeprecated';
 
+import AllEmojiPicker from '../../common/AllEmojiPicker';
 import CustomEmojiPicker from '../../common/CustomEmojiPicker';
 import Icon from '../../common/icons/Icon';
 import Button from '../../ui/Button';
@@ -196,6 +197,19 @@ const SymbolMenu: FC<OwnProps & StateProps> = ({
 
   function renderContent(isActive: boolean, isFrom: boolean) {
     switch (activeTab) {
+      case SymbolMenuTabs.AllEmoji:
+        return (
+          <AllEmojiPicker
+            className="picker-tab"
+            isHidden={!isOpen || !isActive}
+            idPrefix={idPrefix}
+            loadAndPlay={isOpen && (isActive || isFrom)}
+            chatId={chatId}
+            isTranslucent={!isMobile && isBackgroundTranslucent}
+            onCustomEmojiSelect={handleCustomEmojiSelect}
+            onEmojiSelect={handleEmojiSelect}
+          />
+        );
       case SymbolMenuTabs.Emoji:
         return (
           <EmojiPicker

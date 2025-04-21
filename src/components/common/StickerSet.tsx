@@ -35,6 +35,7 @@ import useOldLang from '../../hooks/useOldLang';
 import useResizeObserver from '../../hooks/useResizeObserver';
 import useWindowSize from '../../hooks/window/useWindowSize';
 
+import EmojiButton from '../middle/composer/EmojiButton';
 import Button from '../ui/Button';
 import ConfirmDialog from '../ui/ConfirmDialog';
 import Icon from './icons/Icon';
@@ -76,6 +77,9 @@ type OwnProps = {
   onContextMenuOpen?: NoneToVoidFunction;
   onContextMenuClose?: NoneToVoidFunction;
   onContextMenuClick?: NoneToVoidFunction;
+  recentEmojis?: string[];
+  allEmojis?: AllEmojis;
+  onEmojiSelect?: (emoji: string, name: string) => void;
 };
 
 type StateProps = {
@@ -122,6 +126,9 @@ const StickerSet: FC<OwnProps & StateProps> = ({
   onContextMenuClose,
   onContextMenuClick,
   collectibleStatuses,
+  recentEmojis,
+  allEmojis,
+  onEmojiSelect,
 }) => {
   const {
     clearRecentStickers,
@@ -370,6 +377,25 @@ const StickerSet: FC<OwnProps & StateProps> = ({
               sharedCanvasRef={sharedCanvasRef}
               sharedCanvasHqRef={sharedCanvasHqRef}
               forcePlayback={forcePlayback}
+            />
+          );
+        })}
+        {shouldRender && recentEmojis?.map((name) => {
+          if (!allEmojis || !onEmojiSelect) { return undefined; }
+          const emoji = allEmojis[name];
+          // Recent emojis may contain emoticons that are no longer in the list
+          if (!emoji) {
+            return undefined;
+          }
+          // Some emojis have multiple skins and are represented as an Object with emojis for all skins.
+          // For now, we select only the first emoji with 'neutral' skin.
+          const displayedEmoji = 'id' in emoji ? emoji : emoji[1];
+
+          return (
+            <EmojiButton
+              key={displayedEmoji.id}
+              emoji={displayedEmoji}
+              onClick={onEmojiSelect}
             />
           );
         })}
